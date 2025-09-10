@@ -18,7 +18,6 @@
         <dep.graalvm.version>25.0.0</dep.graalvm.version>
         <dep.ranger.version>2.7.0</dep.ranger.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
