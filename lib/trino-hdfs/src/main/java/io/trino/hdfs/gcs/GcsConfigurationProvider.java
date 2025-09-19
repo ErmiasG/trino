@@ -19,9 +19,9 @@ import org.apache.hadoop.conf.Configuration;
 
 import java.net.URI;
 
-// import static com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem.SCHEME;
-// import static io.trino.hdfs.DynamicConfigurationProvider.setCacheKey;
-// import static io.trino.hdfs.gcs.GcsAccessTokenProvider.GCS_ACCESS_TOKEN_CONF;
+import static com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem.SCHEME;
+import static io.trino.hdfs.DynamicConfigurationProvider.setCacheKey;
+import static io.trino.hdfs.gcs.GcsAccessTokenProvider.GCS_ACCESS_TOKEN_CONF;
 
 public class GcsConfigurationProvider
         implements DynamicConfigurationProvider
@@ -31,14 +31,14 @@ public class GcsConfigurationProvider
     @Override
     public void updateConfiguration(Configuration configuration, HdfsContext context, URI uri)
     {
-        // if (!uri.getScheme().equals(SCHEME)) {
-            // return;
-        // }
+        if (!uri.getScheme().equals(SCHEME)) {
+            return;
+        }
 
-        // String accessToken = context.getIdentity().getExtraCredentials().get(GCS_OAUTH_KEY);
-        // if (accessToken != null) {
-            // configuration.set(GCS_ACCESS_TOKEN_CONF, accessToken);
-            // setCacheKey(configuration, accessToken);
-        // }
+        String accessToken = context.getIdentity().getExtraCredentials().get(GCS_OAUTH_KEY);
+        if (accessToken != null) {
+            configuration.set(GCS_ACCESS_TOKEN_CONF, accessToken);
+            setCacheKey(configuration, accessToken);
+        }
     }
 }
