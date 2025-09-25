@@ -790,6 +790,26 @@
             </dependency>
 
             <dependency>
+                <groupId>io.hops.hive</groupId>
+                <artifactId>hive-apache</artifactId>
+                <version>3.0.0.13.10</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.annotation</groupId>
+                        <artifactId>javax.annotation-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.parquet</groupId>
+                        <artifactId>parquet-hadoop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.parquet</groupId>
+                        <artifactId>parquet-jackson</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-api</artifactId>
                 <version>${dep.jsonwebtoken.version}</version>
@@ -1593,26 +1613,6 @@
                 <groupId>io.trino.hadoop</groupId>
                 <artifactId>hadoop-apache</artifactId>
                 <version>3.2.0-18-HOPSFS</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.trino.hive</groupId>
-                <artifactId>hive-apache</artifactId>
-                <version>3.1.2-23</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.annotation</groupId>
-                        <artifactId>javax.annotation-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.parquet</groupId>
-                        <artifactId>parquet-hadoop</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.parquet</groupId>
-                        <artifactId>parquet-jackson</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
