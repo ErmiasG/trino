@@ -46,7 +46,7 @@
         </dependency>
 
         <dependency>
-            <groupId>io.trino.hadoop</groupId>
+            <groupId>io.hops.hadoop</groupId>
             <artifactId>hadoop-apache</artifactId>
         </dependency>
 
