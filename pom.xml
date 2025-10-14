@@ -2427,6 +2427,42 @@
         </dependencies>
     </dependencyManagement>
 
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+            </snapshots>
+            <id>HiveEE</id>
+            <name>Hive Release Repository</name>
+            <url>https://nexus.hops.works/repository/hive-artifacts</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+            </snapshots>
+            <id>HopsEE</id>
+            <name>Hops Release Repository</name>
+            <url>https://nexus.hops.works/repository/hops-artifacts</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <id>Hops release</id>
+            <name>Hops Release Repository</name>
+            <url>https://archiva.hops.works/repository/Hops/</url>
+        </repository>
+    </repositories>
+
     <build>
         <pluginManagement>
             <plugins>
