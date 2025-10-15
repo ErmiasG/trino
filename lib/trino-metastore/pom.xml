@@ -108,13 +108,13 @@
         </dependency>
 
         <dependency>
-            <groupId>io.trino.hadoop</groupId>
+            <groupId>io.hops.hadoop</groupId>
             <artifactId>hadoop-apache</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.trino.hive</groupId>
+            <groupId>io.hops.hive</groupId>
             <artifactId>hive-apache</artifactId>
             <scope>test</scope>
         </dependency>
