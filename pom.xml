@@ -798,7 +798,7 @@
             <dependency>
                 <groupId>io.hops.hive</groupId>
                 <artifactId>hive-apache</artifactId>
-                <version>3.0.0.13.10</version>
+                <version>3.0.0.13.13</version>
                 <exclusions>
                     <exclusion>
                         <groupId>javax.annotation</groupId>
