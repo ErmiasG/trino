@@ -45,12 +45,14 @@ jobs:
       - name: Set Docker Registry
         if: github.event_name == 'push'
         run: |
-          echo "DOCKER_REGISTRY=docker.hops.works/dev/salman/trino" >> $GITHUB_ENV
-          
-          #Uncomment once we are ready to release
-          #if [[ "${{ github.repository }}" == "logicalclocks/trino" && "${{ github.ref }}" == refs/heads/branch-* ]]; then
-          #  echo "DOCKER_REGISTRY=docker.hops.works/hopsworks/trino" >> $GITHUB_ENV
-          #fi
+          # Images in docker.hops.works/hopsworks/trino are immutable.
+          # For branches that are not yet ready for release, change 
+          # the following lines to avoid publishing to the release registry.
+          if [[ "${{ github.repository }}" == "logicalclocks/trino" && "${{ github.ref }}" == refs/heads/branch-* ]]; then
+            echo "DOCKER_REGISTRY=docker.hops.works/hopsworks/trino" >> $GITHUB_ENV
+          else
+            echo "DOCKER_REGISTRY=docker.hops.works/dev/salman/trino" >> $GITHUB_ENV
+          fi
 
       - name: Build Docker Image
         if: github.event_name == 'push'
