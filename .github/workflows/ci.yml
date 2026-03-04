@@ -1,6 +1,7 @@
-name: CI
+name: CI (disabled - manual only)
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -46,7 +47,7 @@ jobs:
         if: github.event_name == 'push'
         run: |
           # Images in docker.hops.works/hopsworks/trino are immutable.
-          # For branches that are not yet ready for release, change 
+          # For branches that are not yet ready for release, change
           # the following lines to avoid publishing to the release registry.
           if [[ "${{ github.repository }}" == "logicalclocks/trino" && "${{ github.ref }}" == refs/heads/branch-* ]]; then
             echo "DOCKER_REGISTRY=docker.hops.works/hopsworks/trino" >> $GITHUB_ENV
