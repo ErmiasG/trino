@@ -27,7 +27,7 @@ node("local") {
 
         env.TRINO_VERSION = sh(script: './mvnw -f pom.xml --quiet help:evaluate -Dexpression=project.version -DforceStdout', returnStdout: true).trim()
 
-        echo "TRINO_VERSION=${env.TRINO_VERSION}.0"
+        echo "TRINO_VERSION=${env.TRINO_VERSION}"
         echo "JDK_DOWNLOAD_LINK=${env.JDK_DOWNLOAD_LINK}"
     }
 
@@ -72,7 +72,8 @@ node("local") {
           # cp -R core/docker/default \"${env.WORK_DIR}/\"
         """
 
-        withEnv(["TAG_VERSION=${env.TRINO_VERSION}", "JDK_RELEASE=${env.JDK_RELEASE}", "JDK_DOWNLOAD_LINK=${env.JDK_DOWNLOAD_LINK}", "ARCH=${env.ARCH}"]) {
+        withEnv(["TAG_VERSION=${env.TRINO_VERSION}.0", "JDK_RELEASE=${env.JDK_RELEASE}", "JDK_DOWNLOAD_LINK=${env
+        .JDK_DOWNLOAD_LINK}", "ARCH=${env.ARCH}"]) {
           def builder = new ImageBuilder(this)
           def m = readFile "${env.WORKSPACE}/build-manifest.json"
           builder.run(m)
