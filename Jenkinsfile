@@ -27,7 +27,7 @@ node("local") {
 
         env.TRINO_VERSION = sh(script: './mvnw -f pom.xml --quiet help:evaluate -Dexpression=project.version -DforceStdout', returnStdout: true).trim()
 
-        echo "TRINO_VERSION=${env.TRINO_VERSION}"
+        echo "TRINO_VERSION=${env.TRINO_VERSION}.0"
         echo "JDK_DOWNLOAD_LINK=${env.JDK_DOWNLOAD_LINK}"
     }
 
