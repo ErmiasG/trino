@@ -30,6 +30,30 @@ RUN \
     tar -zxf /jdktarfile --strip 1 -C "${JAVA_HOME}" && \
     echo "Done"
 
+# The native launcher in the server tarball is airlift/launcher's release binary,
+# so it carries whichever Go airlift built it with (go1.26.5 in launcher 321,
+# GO-2026-6809). Rebuild the same source with a current Go: the revision and
+# version are read from the bundled binary's own build info, so this follows
+# every launcher bump without a version to keep in step. Flags as in airlift's
+# src/main/go/build.sh.
+FROM --platform=$BUILDPLATFORM golang:1.26-alpine AS launcher
+ARG ARCH
+COPY trino-server/bin/linux-${ARCH}/launcher /bundled-launcher
+RUN \
+    set -eu && \
+    info=$(go version -m /bundled-launcher) && \
+    revision=$(echo "$info" | sed -n 's/.*vcs\.revision=\([0-9a-f]*\).*/\1/p') && \
+    version=$(echo "$info" | sed -n 's/.*-X launcher\/args\.Version=\([^ "]*\).*/\1/p') && \
+    : "${revision:?no vcs.revision in the bundled launcher}" "${version:?no args.Version in the bundled launcher}" && \
+    apk add --no-cache git && \
+    git init -q /src && \
+    git -C /src fetch -q --depth 1 https://github.com/airlift/launcher "${revision}" && \
+    git -C /src checkout -q FETCH_HEAD && \
+    cd /src/src/main/go && \
+    CGO_ENABLED=0 GOOS=linux GOARCH="${ARCH}" go build \
+      -ldflags="-s -w -extldflags=-static -X launcher/args.Version=${version}" -o /launcher . && \
+    go version -m /launcher
+
 FROM redhat/ubi10 AS packages
 
 RUN \
@@ -70,6 +94,7 @@ RUN \
 COPY --chown=trino:trino trino-cli.jar /usr/bin/trino
 COPY --chown=trino:trino --exclude=bin/darwin-* --exclude=bin/linux-* trino-server /usr/lib/trino
 COPY --chown=trino:trino trino-server/bin/linux-${ARCH} /usr/lib/trino/bin/linux-${ARCH}
+COPY --chown=trino:trino --from=launcher /launcher /usr/lib/trino/bin/linux-${ARCH}/launcher
 COPY --chown=trino:trino default/etc /etc/trino
 COPY --chown=trino:trino --from=jvmkill /libjvmkill.so /usr/lib/trino/bin
 
