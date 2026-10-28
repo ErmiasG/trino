@@ -98,6 +98,11 @@ COPY --chown=trino:trino --from=launcher /launcher /usr/lib/trino/bin/linux-${AR
 COPY --chown=trino:trino default/etc /etc/trino
 COPY --chown=trino:trino --from=jvmkill /libjvmkill.so /usr/lib/trino/bin
 
+# CVE-2026-114820: the JVM trusts this cacerts, and user catalogs connect out
+# through it. Not in jdk-download: that stage runs on the build platform, where
+# the keytool of a cross-arch JDK cannot run.
+RUN sh /usr/lib/trino/bin/remove-distrusted-roots.sh "${JAVA_HOME}/lib/security/cacerts" changeit
+
 EXPOSE 8080
 USER trino:trino
 CMD ["/usr/lib/trino/bin/run-trino"]
