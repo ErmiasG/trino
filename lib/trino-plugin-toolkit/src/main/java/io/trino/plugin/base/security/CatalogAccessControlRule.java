@@ -56,8 +56,7 @@ public class CatalogAccessControlRule
 
     public Optional<AccessMode> match(String user, Set<String> roles, Set<String> groups, String catalog)
     {
-        if (identityMatcher.matches(user, roles, groups) &&
-                catalogPattern.map(pattern -> pattern.matches(user, catalog)).orElse(true)) {
+        if (new ReplacePatternMatcher(identityMatcher, user, roles, groups).matchCatalog(catalogPattern, catalog)) {
             return Optional.of(accessMode);
         }
         return Optional.empty();

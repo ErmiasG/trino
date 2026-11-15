@@ -117,6 +117,7 @@
         <module>plugin/trino-snowflake</module>
         <module>plugin/trino-spooling-filesystem</module>
         <module>plugin/trino-sqlserver</module>
+        <module>plugin/trino-teradata</module>
         <module>plugin/trino-teradata-functions</module>
         <module>plugin/trino-thrift</module>
         <module>plugin/trino-thrift-api</module>
@@ -744,6 +745,38 @@
                 <groupId>io.github.jeschkies</groupId>
                 <artifactId>loki-client</artifactId>
                 <version>0.0.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.hops.hadoop</groupId>
+                <artifactId>hadoop-apache</artifactId>
+                <version>3.4.3.3-EE-RC1</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.lz4</groupId>
+                        <artifactId>lz4-java</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>io.hops.hive</groupId>
+                <artifactId>hive-apache</artifactId>
+                <version>4.1.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.annotation</groupId>
+                        <artifactId>javax.annotation-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.parquet</groupId>
+                        <artifactId>parquet-hadoop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.parquet</groupId>
+                        <artifactId>parquet-jackson</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -1487,34 +1520,6 @@
             </dependency>
 
             <dependency>
-                <groupId>io.trino.hadoop</groupId>
-                <artifactId>hadoop-apache</artifactId>
-                <version>3.3.5-3</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.lz4</groupId>
-                        <artifactId>lz4-java</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>io.trino.hive</groupId>
-                <artifactId>hive-apache</artifactId>
-                <version>3.1.2-23</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.parquet</groupId>
-                        <artifactId>parquet-hadoop</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.parquet</groupId>
-                        <artifactId>parquet-jackson</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
                 <groupId>io.trino.hive</groupId>
                 <artifactId>hive-apache-jdbc</artifactId>
                 <version>0.13.1-10</version>
@@ -2190,6 +2195,42 @@
         </dependencies>
     </dependencyManagement>
 
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+            </snapshots>
+            <id>HiveEE</id>
+            <name>Hive Release Repository</name>
+            <url>https://nexus.hops.works/repository/hive-artifacts</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+            </snapshots>
+            <id>HopsEE</id>
+            <name>Hops Release Repository</name>
+            <url>https://nexus.hops.works/repository/hops-artifacts</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <id>Hops release</id>
+            <name>Hops Release Repository</name>
+            <url>https://archiva.hops.works/repository/Hops/</url>
+        </repository>
+    </repositories>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -2361,6 +2402,15 @@
                                 <!-- clickhouse-jdbc contains conflicting dependencies inside itself -->
                                 <groupId>com.clickhouse</groupId>
                                 <artifactId>clickhouse-jdbc</artifactId>
+                            </ignoredDependency>
+                            <ignoredDependency>
+                                <!-- Hops shaded JARs contain overlapping classes (jettison, jspecify) -->
+                                <groupId>io.hops.hadoop</groupId>
+                                <artifactId>hadoop-apache</artifactId>
+                            </ignoredDependency>
+                            <ignoredDependency>
+                                <groupId>io.hops.hive</groupId>
+                                <artifactId>hive-apache</artifactId>
                             </ignoredDependency>
                         </ignoredDependencies>
                         <exceptions combine.children="append">

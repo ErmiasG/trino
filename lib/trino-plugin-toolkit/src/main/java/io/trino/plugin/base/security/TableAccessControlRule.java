@@ -81,9 +81,7 @@ public class TableAccessControlRule
 
     public boolean matches(String user, Set<String> roles, Set<String> groups, SchemaTableName table)
     {
-        return identityMatcher.matches(user, roles, groups) &&
-                schemaPattern.map(pattern -> pattern.matches(user, table.getSchemaName())).orElse(true) &&
-                tablePattern.map(pattern -> pattern.matches(user, table.getTableName())).orElse(true);
+        return new ReplacePatternMatcher(identityMatcher, user, roles, groups).matchSchemaAndTable(schemaPattern, table.getSchemaName(), tablePattern, table.getTableName());
     }
 
     public Set<String> getRestrictedColumns()
@@ -145,6 +143,11 @@ public class TableAccessControlRule
     Optional<UserSubstitutingPattern> getSchemaPattern()
     {
         return schemaPattern;
+    }
+
+    Optional<UserSubstitutingPattern> getTablePattern()
+    {
+        return tablePattern;
     }
 
     public enum TablePrivilege

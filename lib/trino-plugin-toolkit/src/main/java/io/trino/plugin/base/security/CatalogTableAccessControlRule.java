@@ -58,10 +58,14 @@ public class CatalogTableAccessControlRule
 
     public boolean matches(String user, Set<String> roles, Set<String> groups, CatalogSchemaTableName table)
     {
-        if (!catalogPattern.map(pattern -> pattern.matches(user, table.getCatalogName())).orElse(true)) {
-            return false;
-        }
-        return tableAccessControlRule.matches(user, roles, groups, table.getSchemaTableName());
+        // Catalog, schema and table in one call, so a single matching group supplies $1 for all three
+        return new ReplacePatternMatcher(tableAccessControlRule.getIdentityMatcher(), user, roles, groups).matchCatalogSchemaAndTable(
+                catalogPattern,
+                table.getCatalogName(),
+                tableAccessControlRule.getSchemaPattern(),
+                table.getSchemaTableName().getSchemaName(),
+                tableAccessControlRule.getTablePattern(),
+                table.getSchemaTableName().getTableName());
     }
 
     public Set<TablePrivilege> getPrivileges()

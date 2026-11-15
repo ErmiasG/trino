@@ -55,8 +55,7 @@ public class QueryAccessRule
 
     public Optional<Set<AccessMode>> match(String user, Set<String> roles, Set<String> groups, Optional<String> queryOwner)
     {
-        if (identityMatcher.matches(user, roles, groups) &&
-                ((queryOwner.isEmpty() && queryOwnerRegex.isEmpty()) || (queryOwner.isPresent() && queryOwnerRegex.map(regex -> regex.matcher(queryOwner.get()).matches()).orElse(true)))) {
+        if (new ReplacePatternMatcher(identityMatcher, user, roles, groups).matchQueryAccessRule(queryOwnerRegex, queryOwner)) {
             return Optional.of(allow);
         }
         return Optional.empty();
