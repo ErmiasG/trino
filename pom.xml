@@ -42,6 +42,7 @@
         <module>docs</module>
         <module>lib/trino-array</module>
         <module>lib/trino-cache</module>
+        <module>lib/trino-catalog-file-secrets</module>
         <module>lib/trino-filesystem</module>
         <module>lib/trino-filesystem-azure</module>
         <module>lib/trino-filesystem-gcs</module>
