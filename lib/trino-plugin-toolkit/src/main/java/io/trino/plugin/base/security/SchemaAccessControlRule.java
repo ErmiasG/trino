@@ -50,8 +50,7 @@ public class SchemaAccessControlRule
 
     public Optional<Boolean> match(String user, Set<String> roles, Set<String> groups, String schema)
     {
-        if (identityMatcher.matches(user, roles, groups) &&
-                schemaPattern.map(pattern -> pattern.matches(user, schema)).orElse(true)) {
+        if (new ReplacePatternMatcher(identityMatcher, user, roles, groups).matchSchema(schemaPattern, schema)) {
             return Optional.of(owner);
         }
         return Optional.empty();

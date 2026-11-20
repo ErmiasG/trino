@@ -30,8 +30,7 @@ public class AnyCatalogPermissionsRule
 
     public boolean match(String user, Set<String> roles, Set<String> groups, String catalog)
     {
-        return identityMatcher.matches(user, roles, groups) &&
-                catalogPattern.map(pattern -> pattern.matches(user, catalog)).orElse(true);
+        return new ReplacePatternMatcher(identityMatcher, user, roles, groups).matchCatalog(catalogPattern, catalog);
     }
 
     @Override

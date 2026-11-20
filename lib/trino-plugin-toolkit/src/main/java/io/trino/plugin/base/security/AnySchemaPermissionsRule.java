@@ -30,8 +30,7 @@ public class AnySchemaPermissionsRule
 
     public boolean match(String user, Set<String> roles, Set<String> groups, String schemaName)
     {
-        return identityMatcher.matches(user, roles, groups) &&
-                schemaPattern.map(pattern -> pattern.matches(user, schemaName)).orElse(true);
+        return new ReplacePatternMatcher(identityMatcher, user, roles, groups).matchSchema(schemaPattern, schemaName);
     }
 
     @Override

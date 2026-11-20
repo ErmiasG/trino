@@ -51,10 +51,12 @@ public class CatalogSchemaAccessControlRule
 
     public Optional<Boolean> match(String user, Set<String> roles, Set<String> groups, CatalogSchemaName schema)
     {
-        if (!catalogPattern.map(pattern -> pattern.matches(user, schema.getCatalogName())).orElse(true)) {
+        // Catalog and schema in one call, so a single matching group supplies $1 for both
+        ReplacePatternMatcher replacePatternMatcher = new ReplacePatternMatcher(schemaAccessControlRule.getIdentityMatcher(), user, roles, groups);
+        if (!replacePatternMatcher.matchCatalogAndSchema(catalogPattern, schema.getCatalogName(), schemaAccessControlRule.getSchemaPattern(), schema.getSchemaName())) {
             return Optional.empty();
         }
-        return schemaAccessControlRule.match(user, roles, groups, schema.getSchemaName());
+        return Optional.of(schemaAccessControlRule.isOwner());
     }
 
     Optional<AnyCatalogPermissionsRule> toAnyCatalogPermissionsRule()

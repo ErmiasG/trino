@@ -41,9 +41,19 @@ public class IdentityMatcher
                 groupRegex.map(regex -> groups.stream().anyMatch(group -> regex.matcher(group).matches())).orElse(true);
     }
 
+    Optional<Pattern> getUserRegex()
+    {
+        return userRegex;
+    }
+
     public Optional<Pattern> getRoleRegex()
     {
         return roleRegex;
+    }
+
+    Optional<Pattern> getGroupRegex()
+    {
+        return groupRegex;
     }
 
     @Override

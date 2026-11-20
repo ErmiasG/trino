@@ -32,9 +32,7 @@ public class AnyCatalogSchemaPermissionsRule
 
     public boolean match(String user, Set<String> roles, Set<String> groups, String catalogName, String schemaName)
     {
-        return identityMatcher.matches(user, roles, groups) &&
-                catalogPattern.map(pattern -> pattern.matches(user, catalogName)).orElse(true) &&
-                schemaPattern.map(pattern -> pattern.matches(user, schemaName)).orElse(true);
+        return new ReplacePatternMatcher(identityMatcher, user, roles, groups).matchCatalogAndSchema(catalogPattern, catalogName, schemaPattern, schemaName);
     }
 
     @Override
