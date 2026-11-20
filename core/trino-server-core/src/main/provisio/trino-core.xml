@@ -31,6 +31,9 @@
             <unpack />
         </artifact>
     </artifactSet>
+    <artifactSet to="secrets-plugin/catalog-file-secrets-plugin">
+        <artifact id="${project.groupId}:trino-catalog-file-secrets:${project.version}" />
+    </artifactSet>
 
     <!-- Plugins -->
     <artifactSet to="plugin/exchange-filesystem">
