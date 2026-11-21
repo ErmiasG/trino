@@ -39,10 +39,12 @@ node("local") {
         // downloaded JDK, and anything else at the root alone.
         sh "git clean -xfd core/trino-web-ui"
 
-        env.TRINO_VERSION = sh(script: "./mvnw -f pom.xml --quiet -Dmaven.repo.local=\"${env.MAVEN_LOCAL_REPO}\" help:evaluate -Dexpression=project.version -DforceStdout", returnStdout: true).trim()
+        // -N: read only the root pom. Reading the modules loads trino-maven-plugin, which since 484 needs
+        // Java 25, and this runs on the node's Java; the downloaded JDK 25 is only used for the build.
+        env.TRINO_VERSION = sh(script: "./mvnw -N -f pom.xml --quiet -Dmaven.repo.local=\"${env.MAVEN_LOCAL_REPO}\" help:evaluate -Dexpression=project.version -DforceStdout", returnStdout: true).trim()
 
         // JDK version is now defined as <temurin.release> in pom.xml
-        env.JDK_RELEASE = sh(script: "./mvnw -f pom.xml --quiet -Dmaven.repo.local=\"${env.MAVEN_LOCAL_REPO}\" help:evaluate -Dexpression=temurin.release -DforceStdout", returnStdout: true).trim()
+        env.JDK_RELEASE = sh(script: "./mvnw -N -f pom.xml --quiet -Dmaven.repo.local=\"${env.MAVEN_LOCAL_REPO}\" help:evaluate -Dexpression=temurin.release -DforceStdout", returnStdout: true).trim()
 
         // Construct the Adoptium download URL from the release name and architecture
         env.JDK_DOWNLOAD_LINK = "https://api.adoptium.net/v3/binary/version/${env.JDK_RELEASE}/linux/x64/jdk/hotspot/normal/eclipse?project=jdk"
