@@ -7,10 +7,9 @@
 #
 # Usage: remove-distrusted-roots.sh <store> <storepass>
 #
-# The same file ships in several images (hopsworks-ee payara-server,
-# payara-node, payara-micro; trino; docker-images opensearch); keep the copies
-# identical. POSIX sh with keytool and shell builtins only: the Trino base has
-# no sed or awk, and payara-micro is Alpine.
+# Copies of this file ship in images built from hopsworks-ee, trino and
+# docker-images; keep every copy identical. POSIX sh with keytool and shell
+# builtins only: the Trino base has no sed or awk, and payara-micro is Alpine.
 set -eu
 
 if [ $# -ne 2 ]; then
